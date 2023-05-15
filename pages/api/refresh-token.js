@@ -2,11 +2,11 @@ import SpotifyWebApi from 'spotify-web-api-node'
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "4a8cd4a6e0e842008152297f6616e49f",
-  clientSecret: "5832ec49d8a04acda4d3daa885a3a41a",
+  clientSecret: process.env.CLIENT_SECRET,
   redirectUri: 'http://localhost:3000/callback'
 })
 
-var code = "AQC3lH-wrGbU9n-Ey2e1ZQRdPRbldBWjf4AVSBhnj38Pp7nSRHsoLdtmgPATnMruE5HCzAisThG-o7HeOHjyEqeJI22lSFNBIBUcLcpsWUtwbZ2GZ_Im47Dr8TjuWeDeg_8"
+var code = process.env.CALLBACK_CODE
 
 export default async function handler(req, res) {
     try {
