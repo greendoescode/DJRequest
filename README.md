@@ -1,12 +1,12 @@
 Simple music requesting thing
 
 ## Bugs
-Refreshing Spotify Tokens
-Adding to Queue (Cannot test, for premuim accounts)
+1. Refreshing Spotify Tokens
+2. Adding to Queue (Cannot test, for premuim accounts)
 
 ## TODO
-Styling
-General Design
+1. Styling
+2. General Design
 
 ## Getting Started
 
