@@ -1,4 +1,6 @@
+import { processEnv } from '@next/env'
 import SpotifyWebApi from 'spotify-web-api-node'
+require('dotenv').config()
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "4a8cd4a6e0e842008152297f6616e49f",
