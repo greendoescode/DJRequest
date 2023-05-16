@@ -1,9 +1,9 @@
 Simple music requesting thing
 
 ## Bugs
-- [ ] Refreshing Spotify Tokens
+- [x] Refreshing Spotify Tokens
 - [ ] Adding to Queue (Cannot test, for premuim accounts)
-- [ ] Not figured out ENVS yet, Sorry.
+- [x] Not figured out ENVS yet, Sorry.
 
 ## TODO
 - [ ] Styling

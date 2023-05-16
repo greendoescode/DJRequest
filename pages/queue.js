@@ -34,7 +34,6 @@ function QueuePage() {
     const getQueue = async () => {
       try {
         const queueResult = await spotifyApi.getMyCurrentPlaybackState()
-        console.error(queueResult)
         const lastSongResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 1 })
         const totalSongsResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 50 })
   
@@ -42,8 +41,8 @@ function QueuePage() {
         setUpcomingSong(queueResult)
         setTotalSongs(totalSongsResult.items.length)
       } catch (error) {
-        console.error(error)
         if (error.status === 401) {
+          console.error("API Returned Unauthorized, Getting Token.",error)
           try {
             const data = await fetch('/api/refresh-token', {
               method: 'POST',
@@ -51,7 +50,6 @@ function QueuePage() {
                 'Content-Type': 'application/json'
               }
             }).then(res => res.json())
-            console.log(data.accessToken)
             if (data.accessToken) {
               spotifyApi.setAccessToken(data.accessToken)
               await getQueue()

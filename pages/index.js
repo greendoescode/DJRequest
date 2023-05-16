@@ -40,6 +40,7 @@ function HomePage() {
       }
     } catch (error) {
         if (error.status === 401) {
+          console.error("API Returned Unauthorized, Getting Token.",error)
             try {
               const data = await fetch('/api/refresh-token', {
                 method: 'POST',
@@ -47,7 +48,6 @@ function HomePage() {
                   'Content-Type': 'application/json'
                 }
               }).then(res => res.json())
-              console.log(data.accessToken)
               if (data.accessToken) {
                 spotifyApi.setAccessToken(data.accessToken)
                 await getQueue()
