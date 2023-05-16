@@ -69,6 +69,8 @@ function QueuePage() {
       <Container className="my-4">
         <Head>
           <title>Queue - DJ</title>
+          <meta name="og:title" content="Current Info For My Music!" />
+          <meta httpEquiv="refresh" content="30"></meta>
         </Head>
         <h1 className="text-center">Current Queue</h1>
         {lastSong && (
