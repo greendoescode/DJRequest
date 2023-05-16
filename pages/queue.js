@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import SpotifyWebApi from 'spotify-web-api-js';
-import Head from 'next/head';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState, useEffect } from "react";
+import SpotifyWebApi from "spotify-web-api-js";
+import Head from "next/head";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import { Container, Card, Navbar, Nav } from 'react-bootstrap';
+import { Container, Card, Navbar, Nav } from "react-bootstrap";
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -11,41 +11,51 @@ function QueuePage() {
   const [lastSong, setLastSong] = useState(null);
   const [upcomingSong, setUpcomingSong] = useState(null);
   const [totalSongs, setTotalSongs] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const getQueue = async () => {
       try {
         const queueResult = await spotifyApi.getMyCurrentPlaybackState();
         console.info(queueResult);
-        const lastSongResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 1 });
-        const totalSongsResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 50 });
+        const lastSongResult = await spotifyApi.getMyRecentlyPlayedTracks({
+          limit: 1,
+        });
+        const totalSongsResult = await spotifyApi.getMyRecentlyPlayedTracks({
+          limit: 50,
+        });
 
         setLastSong(lastSongResult.items[0]);
         setUpcomingSong(queueResult);
         setTotalSongs(totalSongsResult.items.length);
       } catch (error) {
         if (error.status === 401) {
-          console.error('API Returned Unauthorized, Getting Token.', error);
+          console.error("API Returned Unauthorized, Getting Token.", error);
           try {
-            const data = await fetch('/api/refresh-token', {
-              method: 'POST',
+            const data = await fetch("/api/refresh-token", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
             }).then((res) => res.json());
             if (data.accessToken) {
               spotifyApi.setAccessToken(data.accessToken);
               await getQueue();
             } else {
-              setErrorMessage('Sorry, there was an error refreshing your access token. Please try again later.');
+              setErrorMessage(
+                "Sorry, there was an error refreshing your access token. Please try again later."
+              );
             }
           } catch (error) {
-            setErrorMessage('Sorry, there was an error refreshing your access token. Please try again later.');
+            setErrorMessage(
+              "Sorry, there was an error refreshing your access token. Please try again later."
+            );
           }
         } else {
-          setErrorMessage('Sorry, there was an error getting the queue. Please try again later.');
+          setErrorMessage(
+            "Sorry, there was an error getting the queue. Please try again later."
+          );
         }
       }
     };
@@ -79,17 +89,23 @@ function QueuePage() {
             <Card.Body>
               <h2 className="h5">Last Song Played</h2>
               <div className="d-flex align-items-center">
-                <a href={lastSong.track.external_urls.spotify} rel="noreferrer noopener" target="_blank">
+                <a
+                  href={lastSong.track.external_urls.spotify}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
                   <img
                     src={lastSong.track.album.images[0].url}
                     alt={lastSong.track.album.name}
                     className="rounded mr-3 img-thumbnail"
-                    style={{ width: '50px', height: '50px' }}
+                    style={{ width: "50px", height: "50px" }}
                   />
                 </a>
                 <div>
                   <p className="m-2 fs-5">{lastSong.track.name}</p>
-                  <p className="m-2 text-muted fs-6">{lastSong.track.artists[0].name}</p>
+                  <p className="m-2 text-muted fs-6">
+                    {lastSong.track.artists[0].name}
+                  </p>
                 </div>
               </div>
             </Card.Body>
@@ -100,17 +116,23 @@ function QueuePage() {
             <Card.Body>
               <h2 className="h5">Current Song</h2>
               <div className="d-flex align-items-center">
-                <a href={upcomingSong.item.external_urls.spotify} rel="noreferrer noopener" target="_blank">
+                <a
+                  href={upcomingSong.item.external_urls.spotify}
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
                   <img
                     src={upcomingSong.item.album.images[0].url}
                     alt={upcomingSong.item.album.name}
                     className="rounded mr-3 img-thumbnail"
-                    style={{ width: '50px', height: '50px' }}
+                    style={{ width: "50px", height: "50px" }}
                   />
                 </a>
                 <div>
                   <p className="m-2 fs-5">{upcomingSong.item.name}</p>
-                  <p className="m-2 text-muted fs-6">{upcomingSong.item.artists[0].name}</p>
+                  <p className="m-2 text-muted fs-6">
+                    {upcomingSong.item.artists[0].name}
+                  </p>
                 </div>
               </div>
             </Card.Body>
@@ -128,8 +150,7 @@ function QueuePage() {
         {successMessage && <p className="text-success">{successMessage}</p>}
       </Container>
     </>
-
-);
+  );
 }
 
 export default QueuePage;
