@@ -87,7 +87,7 @@ function HomePage() {
         <Head>
           <title>Home - DJ</title>
         </Head>
-        <h1>Welcome to the DJ request website!</h1>
+        <h1>Welcome to my music stats website!</h1>
         <p>Please use the form below to suggest a song to be played.</p>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
