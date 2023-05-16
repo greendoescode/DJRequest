@@ -6,8 +6,8 @@ Simple music requesting thing
 - [x] Not figured out ENVS yet, Sorry.
 
 ## TODO
-- [ ] Styling
-- [ ] General Design
+- [x] Styling
+- [x] General Design
 
 Editing
 
