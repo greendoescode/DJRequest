@@ -88,7 +88,7 @@ function HomePage() {
           <title>Home - DJ</title>
         </Head>
         <h1>Welcome to my music stats website!</h1>
-        <p>Please use the form below to suggest a song to be played.</p>
+        <p>Please use the form below to suggest a song to be played, reminder I normally listen to music locally.</p>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="songTitle" className="form-label">Song Title:</label>

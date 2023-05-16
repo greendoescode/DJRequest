@@ -18,6 +18,7 @@ function QueuePage() {
     const getQueue = async () => {
       try {
         const queueResult = await spotifyApi.getMyCurrentPlaybackState();
+        console.info(queueResult);
         const lastSongResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 1 });
         const totalSongsResult = await spotifyApi.getMyRecentlyPlayedTracks({ limit: 50 });
 
@@ -72,7 +73,7 @@ function QueuePage() {
           <meta name="og:title" content="Current Info For My Music!" />
           <meta httpEquiv="refresh" content="30"></meta>
         </Head>
-        <h1 className="text-center">Current Queue</h1>
+        <h1 className="text-left">Current Queue</h1>
         {lastSong && (
           <Card className="my-4 smaller-card">
             <Card.Body>
@@ -118,6 +119,10 @@ function QueuePage() {
         <div className="text-center">
           <h2 className="h6">Total Songs Played Today</h2>
           <p className="h4">{totalSongs}</p>
+        </div>
+        <div className="text-left">
+          <h2 className="h6">Is shuffle on?</h2>
+          <p className="h4">True</p>
         </div>
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
         {successMessage && <p className="text-success">{successMessage}</p>}
