@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
 import { Container, Card, Button, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookies from "js-cookie";
 
 function InboxPage() {
   const [songRequests, setSongRequests] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    const isLoggedIn = Cookies.get("isLoggedIn");
+    const username = Cookies.get("user_id")
+
+    if (!isLoggedIn) {
+      window.location.href = "/login";
+      return;
+    }
+
     fetch("/api/song-requests")
       .then((response) => response.json())
       .then((data) => {
@@ -22,7 +31,16 @@ function InboxPage() {
       });
   }, []);
 
+  const handleLogout = () => {
+    Cookies.remove("isLoggedIn");
+    window.location.href = "/login"; 
+  };
 
+  const isLoggedIn = Cookies.get("isLoggedIn");
+
+  if (!isLoggedIn) {
+    return null; 
+  }
 
   return (
     <>
@@ -34,10 +52,12 @@ function InboxPage() {
             <Nav className="ml-auto">
               <Nav.Link href="/queue">Current Queue</Nav.Link>
               <Nav.Link href="/inbox">Inbox</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
       <Container>
         <h1>Inbox</h1>
         <div>
@@ -58,7 +78,7 @@ function InboxPage() {
                   </Card.Text>
                 )}
                 <Card.Text>
-                  <strong><a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={"http://slavart.gamesdrive.net/tracks?q=" + request.title + " " + request.artist} rev="Download song here!">Download here!</a></strong>
+                  <strong><a className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={"http://slavart.gamesdrive.net/tracks?q=" + request.title + " " + request.artist} rev="Download song here!">Download here!</a></strong>
                 </Card.Text>
               </Card.Body>
             </Card>
