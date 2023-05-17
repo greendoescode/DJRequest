@@ -32,7 +32,7 @@ function LoginPage() {
         if (data.error) {
           setErrorMessage(data.error);
         } else {
-          Cookies.set("isLoggedIn", "true");
+          Cookies.set("isLoggedIn", "true", { expires: 365, sameSite: 'true', secure: true });
           window.location.href = "/";
         }
       })
