@@ -142,10 +142,6 @@ function QueuePage() {
           <h2 className="h6">Total Songs Played Today</h2>
           <p className="h4">{totalSongs}</p>
         </div>
-        <div className="text-left">
-          <h2 className="h6">Is shuffle on?</h2>
-          <p className="h4">True</p>
-        </div>
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
         {successMessage && <p className="text-success">{successMessage}</p>}
       </Container>
