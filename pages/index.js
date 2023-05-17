@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
-import Head from "next/head";
+import { useRouter } from "next/router";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import { Container, Card, Navbar, Nav } from "react-bootstrap";
 
 const spotifyApi = new SpotifyWebApi();
 
 function HomePage() {
+  const router = useRouter();
   const [songTitle, setSongTitle] = useState("");
   const [songArtist, setSongArtist] = useState("");
   const [songComments, setSongComments] = useState("");
@@ -30,6 +30,7 @@ function HomePage() {
     event.preventDefault();
 
     try {
+      // Send the song request data to the backend API
       const searchResult = await spotifyApi.searchTracks(
         `${songTitle} ${songArtist}`,
         { limit: 1 }
@@ -42,11 +43,29 @@ function HomePage() {
         );
         setSuccessMessage("");
       } else {
-        await spotifyApi.queue(track.uri);
-        setSuccessMessage(
-          `"${track.name}" by ${track.artist.name} has been added to the queue.`
-        );
-        setErrorMessage("");
+        const response = await fetch("/api/song-requests", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: songTitle,
+            artist: songArtist,
+            comments: songComments,
+          }),
+        });
+        if (response.ok) {
+          setSuccessMessage("Song request added successfully!");
+          setErrorMessage("");
+          setSongTitle("");
+          setSongArtist("");
+          setSongComments("");
+        } else {
+          setErrorMessage(
+            "Sorry, there was an error adding your song request. Please try again later."
+          );
+          setSuccessMessage("");
+        }
       }
     } catch (error) {
       if (error.status === 401) {
@@ -71,17 +90,11 @@ function HomePage() {
             "Sorry, there was an error refreshing your access token. Please try again."
           );
         }
-      } else if (error.status === 403) {
-        setErrorMessage(
-          "Sorry, This account doesn't seem to have Spotify Premium. Thank Spotify!"
-        );
-        setSuccessMessage("");
       } else {
-        setErrorMessage(
-          "Sorry, there was an error adding your song to the queue. Please try again later."
-        );
+        setErrorMessage("Sorry, there was an error adding your song request. Please try again later.");
         setSuccessMessage("");
-      }
+      }  
+      console.error(error);
     }
   };
 
@@ -94,17 +107,15 @@ function HomePage() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <Nav.Link href="/queue">Current Queue</Nav.Link>
+              <Nav.Link href="/inbox">Inbox</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div className="container mt-4">
-        <Head>
-          <title>Home - DJ</title>
-        </Head>
+      <Container className="mt-4">
         <h1>Welcome to my music stats website!</h1>
         <p>
-          Please use the form below to suggest a song to be played, reminder I
+          Please use the form below to suggest a song to be played. Note that I
           normally listen to music locally.
         </p>
         <form onSubmit={handleSubmit}>
@@ -151,7 +162,7 @@ function HomePage() {
         </form>
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-      </div>
+      </Container>
     </>
   );
 }
