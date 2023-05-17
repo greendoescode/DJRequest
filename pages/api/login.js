@@ -55,6 +55,6 @@ export default async function login(req, res) {
     res.json({ message: 'Login successful' });
   } catch (error) {
     console.error('Failed to fetch user:', error);
-    res.status(500).json({ error: 'Failed to login. Please try again later.' });
+    res.status(500).json({ error: `Failed to login. Please try again later. ${error}` });
   }
 }
