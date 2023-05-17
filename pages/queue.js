@@ -72,6 +72,7 @@ function QueuePage() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <Nav.Link href="/queue">Current Queue</Nav.Link>
+              <Nav.Link href="/inbox">Inbox</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -141,10 +142,6 @@ function QueuePage() {
         <div className="text-center">
           <h2 className="h6">Total Songs Played Today</h2>
           <p className="h4">{totalSongs}</p>
-        </div>
-        <div className="text-left">
-          <h2 className="h6">Is shuffle on?</h2>
-          <p className="h4">True</p>
         </div>
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
         {successMessage && <p className="text-success">{successMessage}</p>}
