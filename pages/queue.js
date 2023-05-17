@@ -73,6 +73,7 @@ function QueuePage() {
             <Nav className="ml-auto">
               <Nav.Link href="/queue">Current Queue</Nav.Link>
               <Nav.Link href="/inbox">Inbox</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

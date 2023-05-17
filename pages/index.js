@@ -3,6 +3,7 @@ import SpotifyWebApi from "spotify-web-api-js";
 import { useRouter } from "next/router";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cookies from "js-cookie";
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -25,6 +26,8 @@ function HomePage() {
   const handleSongCommentsChange = (event) => {
     setSongComments(event.target.value);
   };
+  
+  const isLoggedIn = Cookies.get("isLoggedIn");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,8 +39,11 @@ function HomePage() {
         { limit: 1 }
       );
       const track = searchResult.tracks.items[0];
-
-      if (track.explicit === true) {
+      
+      if (!isLoggedIn) {
+        setErrorMessage("Sorry, you must be logged in to submit a recommendation!")
+        setSuccessMessage("");
+      } else if (track.explicit === true) {
         setErrorMessage(
           `Sorry, "${track.name}" by ${track.artists[0].name} contains explicit content and cannot be added to the queue.`
         );
@@ -108,6 +114,7 @@ function HomePage() {
             <Nav className="ml-auto">
               <Nav.Link href="/queue">Current Queue</Nav.Link>
               <Nav.Link href="/inbox">Inbox</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

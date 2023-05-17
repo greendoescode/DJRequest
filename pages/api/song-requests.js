@@ -5,7 +5,7 @@ import mysql from "mysql";
 const pool = mysql.createPool({
   host: "213.171.200.97",
   user: "fshduia",
-  password: "EEmm23?!",
+  password:  process.env.PASSWORD,
   database: "apolga",
   connectTimeout: 20000
 });
