@@ -57,6 +57,9 @@ function InboxPage() {
                     <strong>Comments:</strong> {request.comments}
                   </Card.Text>
                 )}
+                <Card.Text>
+                  <strong><a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={"http://slavart.gamesdrive.net/tracks?q=" + request.title + " " + request.artist} rev="Download song here!">Download here!</a></strong>
+                </Card.Text>
               </Card.Body>
             </Card>
           ))}
