@@ -13,8 +13,8 @@ export default function registerHandler(req, res) {
   if (req.method === "POST") {
     const { username, password } = req.body;
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    const salt = bcrypt.genSalt(10);
+    const hashedPassword = bcrypt.hash(password, salt);
 
     const query = "INSERT INTO music_users (username, password) VALUES (?, ?)";
     const values = [username, hashedPassword];
