@@ -8,8 +8,8 @@ Simple music requesting thing
 ## TODO
 - [x] Styling
 - [x] General Design
-- Add seperate inboxes for people 
-- Seperate spotify stats  
+- [ ] Add seperate inboxes for people 
+- [ ] Seperate spotify stats  
 
 Editing
 
