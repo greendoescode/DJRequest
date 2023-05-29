@@ -42,8 +42,8 @@ export default async function login(req, res) {
     const user = results[0];
 
     const isMatch = await bcrypt.compare(password, user.password);
-    const salt = bcrypt.genSaltSync(10);
-    const hashedUsername = bcrypt.hashSync(user.username, salt);
+    const salt = bcrypt.genSalt(10);
+    const hashedUsername = bcrypt.hash(user.username, salt);
 
     if (!isMatch) {
       res.status(401).json({ error: 'Invalid username or password.' });
