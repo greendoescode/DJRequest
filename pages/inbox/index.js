@@ -3,13 +3,14 @@ import { Container, Card, Button, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
 
+
 function InboxPage() {
   const [songRequests, setSongRequests] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const isLoggedIn = Cookies.get("isLoggedIn");
-    const username = Cookies.get("user_id")
+    const username = Cookies.get("user_id");
 
     if (!isLoggedIn) {
       window.location.href = "/login";
@@ -33,13 +34,38 @@ function InboxPage() {
 
   const handleLogout = () => {
     Cookies.remove("isLoggedIn");
-    window.location.href = "/login"; 
+    window.location.href = "/login";
   };
 
   const isLoggedIn = Cookies.get("isLoggedIn");
 
+  const handleDelete = (id) => {
+    fetch("/api/song-requests", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          setErrorMessage("Failed to delete song request.");
+        } else {
+          // Update the songRequests state after successful deletion
+          setSongRequests((prevRequests) =>
+            prevRequests.filter((request) => request.id !== id)
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setErrorMessage("Failed to delete song request.");
+      });
+  };
+
   if (!isLoggedIn) {
-    return null; 
+    return null;
   }
 
   return (
@@ -78,8 +104,29 @@ function InboxPage() {
                   </Card.Text>
                 )}
                 <Card.Text>
-                  <strong><a className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href={"http://slavart.gamesdrive.net/tracks?q=" + request.title + " " + request.artist} rev="Download song here!">Download here!</a></strong>
+                  <strong>
+                    <a
+                      target="_blank"
+                      className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                      href={
+                        "https://www.youtube.com/results?search_query=" +
+                        request.title +
+                        " " +
+                        request.artist
+                      }
+                      rev="Download song here!"
+                    >
+                      Download here!
+                    </a>
+                  </strong>
                 </Card.Text>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(request.id)}
+                  className="mr-2"
+                >
+                  Delete
+                </Button>
               </Card.Body>
             </Card>
           ))}

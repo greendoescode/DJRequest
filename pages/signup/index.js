@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Card, Form, Button } from "react-bootstrap";
+import { Container, Card, Form, Button, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function SignupPage() {
@@ -29,6 +29,21 @@ function SignupPage() {
   };
 
   return (
+    <>
+    <Navbar bg="dark" variant="dark" expand="md">
+        <Container>
+          <Navbar.Brand href="/">Home</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ml-auto">
+              <Nav.Link href="/queue">Current Queue</Nav.Link>
+              <Nav.Link href="/inbox">Inbox</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
     <Container>
       <div className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
         <Card style={{ width: "400px" }}>
@@ -53,6 +68,7 @@ function SignupPage() {
         </Card>
       </div>  
     </Container>
+  </>
   );
 }
 

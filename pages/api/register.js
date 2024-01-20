@@ -9,24 +9,30 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
-export default function registerHandler(req, res) {
+export default async function registerHandler(req, res) {
   if (req.method === "POST") {
     const { username, password } = req.body;
 
-    const salt = bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(password, salt);
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    const query = "INSERT INTO music_users (username, password) VALUES (?, ?)";
-    const values = [username, hashedPassword];
+      const query = "INSERT INTO music_users (username, password) VALUES (?, ?)";
+      const values = [username, hashedPassword];
 
-    pool.query(query, values, (error, results) => {
-      if (error) {
-        console.error("Failed to register user:", error);
-        res.status(500).json({ error: "Failed to register user" });
-      } else {
-        res.json({ message: "User registered successfully" });
-      }
-    });
+      pool.query(query, values, (error, results) => {
+        if (error) {
+          console.error("Failed to register user:", error);
+          res.status(500).json({ error: "Failed to register user" });
+        } else {
+          res.json({ message: "User registered successfully" });
+          return res.status(200);
+        }
+      });
+    } catch (error) {
+      console.error("Error during registration:", error);
+      res.status(500).json({ error: "Failed to register user" });
+    }
   } else {
     res.status(405).end(); // Method Not Allowed
   }
