@@ -114,9 +114,9 @@ function InboxPage() {
                         " " +
                         request.artist
                       }
-                      rev="Download song here!"
+                      rev="Listen to song here!"
                     >
-                      Download here!
+                      Listen here!
                     </a>
                   </strong>
                 </Card.Text>
