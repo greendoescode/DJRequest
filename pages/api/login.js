@@ -51,7 +51,7 @@ export default async function login(req, res) {
       return;
     }
 
-    res.setHeader('Set-Cookie', serialize('user_id', hashedPassword, { path: '/', maxAge: 365, sameSite: true, secure: true }));
+    res.setHeader('Set-Cookie', serialize('user_id', user.id, { path: '/', maxAge: 31536000, sameSite: true, secure: false }));
 
     res.json({ message: 'Login successful' });
   } catch (error) {

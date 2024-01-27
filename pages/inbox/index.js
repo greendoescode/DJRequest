@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Cookies from "js-cookie";
 
 
-function InboxPage() {
+ function InboxPage() {
   const [songRequests, setSongRequests] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,27 +17,26 @@ function InboxPage() {
       return;
     }
 
-    fetch("/api/song-requests")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          setErrorMessage("Failed to fetch song requests.");
-        } else {
-          setSongRequests(data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setErrorMessage("Failed to fetch song requests.");
+    const fetchrequests = async () => {
+      const response = await fetch("/api/song-requests?id=" + username, {
+        method: "GET",
       });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setSongRequests(data);
+      } else {
+        setErrorMessage("Failed to fetch song requests.");
+      }
+    };
+
+    fetchrequests();
+
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove("isLoggedIn");
-    window.location.href = "/login";
-  };
+  
 
-  const isLoggedIn = Cookies.get("isLoggedIn");
 
   const handleDelete = (id) => {
     fetch("/api/song-requests", {
@@ -63,10 +62,6 @@ function InboxPage() {
         setErrorMessage("Failed to delete song request.");
       });
   };
-
-  if (!isLoggedIn) {
-    return null;
-  }
 
   return (
     <>

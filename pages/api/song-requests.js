@@ -9,10 +9,10 @@ const pool = mysql.createPool({
   connectTimeout: 20000
 });
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === "GET") {
     // Execute the SQL query to fetch all song requests from the database
-    pool.query("SELECT * FROM song_requests", (error, results) => {
+    pool.query("SELECT * FROM song_requests WHERE user_table = " + req.query.id, (error, results) => {
       if (error) {
         console.error(error);
         return res
@@ -22,12 +22,33 @@ export default function handler(req, res) {
       return res.status(200).json(results);
     });
   } else if (req.method === "POST") {
-    const { title, artist, comments } = req.body;
+    const { title, artist, comments, username } = req.body;
 
+    const lowercaseUsername = username.toLowerCase();
+    
+
+    const query = 'SELECT * FROM music_users WHERE username = ?';
+    const values = [lowercaseUsername];
+
+    const results = await new Promise((resolve, reject) => {
+      pool.query(query, values, (error, results) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(results);
+          }
+        });
+      });
+  
+      if (results.length === 0) {
+        res.status(401).json({ error: 'Invalid username or password.' });
+        return;
+      }
+    const user_table = results[0].id;
     // Execute the SQL query to insert the song request into the database
     pool.query(
-      "INSERT INTO song_requests (title, artist, comments) VALUES (?, ?, ?)",
-      [title, artist, comments],
+      "INSERT INTO song_requests (title, artist, comments, user_table) VALUES (?, ?, ?, ?)",
+      [title, artist, comments, user_table],
       (error, results) => {
         if (error) {
           console.error(error);
@@ -40,7 +61,6 @@ export default function handler(req, res) {
     );
   } else if (req.method === "PATCH") {
     const { id } = req.body;
-    console.log(req.body);
 
     if (!id) {
       return res.status(400).json({ error: "ID parameter is required for deletion." });

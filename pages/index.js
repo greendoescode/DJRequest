@@ -12,6 +12,7 @@ function HomePage() {
   const [songTitle, setSongTitle] = useState("");
   const [songArtist, setSongArtist] = useState("");
   const [songComments, setSongComments] = useState("");
+  const [userInbox, setUserInbox] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -25,6 +26,10 @@ function HomePage() {
 
   const handleSongCommentsChange = (event) => {
     setSongComments(event.target.value);
+  };
+
+  const handleUserInboxChange = (event) => {
+    setUserInbox(event.target.value);
   };
   
   const isLoggedIn = Cookies.get("isLoggedIn");
@@ -45,7 +50,7 @@ function HomePage() {
         setSuccessMessage("");
       } else if (track.explicit === true) {
         setErrorMessage(
-          `Sorry, "${track.name}" by ${track.artists[0].name} contains explicit content and cannot be added to the queue.`
+          `Sorry, "${track.name}" by ${track.artists[0].name} contains explicit content and cannot be added to this users inbox.`
         );
         setSuccessMessage("");
       } else {
@@ -58,6 +63,7 @@ function HomePage() {
             title: songTitle,
             artist: songArtist,
             comments: songComments,
+            username: userInbox
           }),
         });
         if (response.ok) {
@@ -66,6 +72,7 @@ function HomePage() {
           setSongTitle("");
           setSongArtist("");
           setSongComments("");
+          setUserInbox("");
         } else {
           setErrorMessage(
             "Sorry, there was an error adding your song request. Please try again later."
@@ -162,6 +169,18 @@ function HomePage() {
               value={songComments}
               onChange={handleSongCommentsChange}
             ></textarea>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="userInbox" className="form-label">
+              Username:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="userInbox"
+              value={userInbox}
+              onChange={handleUserInboxChange}
+            ></input>
           </div>
           <button type="submit" className="btn btn-primary">
             Submit
