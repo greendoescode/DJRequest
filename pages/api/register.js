@@ -14,7 +14,7 @@ export default async function registerHandler(req, res) {
     const { username, password } = req.body;
 
     try {
-      const salt = await bcrypt.genSalt(25);
+      const salt = await bcrypt.genSalt(15);
       const hashedPassword = await bcrypt.hash(password, salt);
 
       const lowercaseUsername = username.toLowerCase();
