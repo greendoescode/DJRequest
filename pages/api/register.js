@@ -17,8 +17,10 @@ export default async function registerHandler(req, res) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
+      const lowercaseUsername = username.toLowerCase();
+
       const query = "INSERT INTO music_users (username, password) VALUES (?, ?)";
-      const values = [username, hashedPassword];
+      const values = [lowercaseUsername, hashedPassword];
 
       pool.query(query, values, (error, results) => {
         if (error) {
