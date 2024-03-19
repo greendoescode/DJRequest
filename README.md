@@ -4,6 +4,7 @@ Simple music requesting thing
 - [x] Refreshing Spotify Tokens
 - [ ] Adding to Queue (Cannot test, for premuim accounts)
 - [x] Not figured out ENVS yet, Sorry.
+- [ ] Refreshing token first time, without having to redo.
 
 ## TODO
 - [x] Styling
