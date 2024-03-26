@@ -109,7 +109,7 @@ import Cookies from "js-cookie";
                         " " +
                         request.artist
                       }
-                      rev="Listen to song here!"
+                      rev="Listen to this song here!"
                     >
                       Listen here!
                     </a>
