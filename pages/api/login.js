@@ -3,12 +3,12 @@ import mysql from 'mysql';
 import { serialize } from 'cookie';
 
 const pool = mysql.createPool({
-    host: "213.171.200.97",
-    user: "fshduia",
-    password: process.env.PASSWORD,
-    database: "apolga",
-    connectionLimit: 10,
-  });
+  host: "213.171.200.97",
+  user: "fshduia",
+  password: process.env.PASSWORD,
+  database: "apolga",
+  connectionLimit: 10,
+});
 
 export default async function login(req, res) {
   if (req.method !== 'POST') {
@@ -41,16 +41,17 @@ export default async function login(req, res) {
 
     const user = results[0];
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const isMatch = await bcrypt.compare(password, user.password);
-    const salt = bcrypt.genSalt(10);
-    const hashedUsername = bcrypt.hash(user.username, salt);
 
     if (!isMatch) {
       res.status(401).json({ error: 'Invalid username or password.' });
       return;
     }
 
-    res.setHeader('Set-Cookie', serialize('user_id', hashedUsername, { path: '/', maxAge: 365, sameSite: true, secure: true }));
+    res.setHeader('Set-Cookie', serialize('user_id', user.id, { path: '/', maxAge: 31536000, sameSite: true, secure: false }));
 
     res.json({ message: 'Login successful' });
   } catch (error) {
